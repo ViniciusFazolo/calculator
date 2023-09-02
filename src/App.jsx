@@ -8,9 +8,10 @@ function App() {
 
   const handleNum = (e) => {
     let num = e.target.value;
-    if (numero.length > 20) return;
+    if ((numero.toString().includes(".") && num === ".") || numero.length > 20)
+      return;
 
-    if (numero === 0) {
+    if (numero.toString().charAt(0) === "0") {
       setNumero(num);
     } else {
       setNumero(numero + num);
@@ -20,19 +21,23 @@ function App() {
   const clear = () => {
     setNumero(0);
     setOldNum(0);
-    op("");
+    setOp("");
   };
 
   const operator = (e) => {
     setOp(e.target.value);
-    setOldNum(numero);
-    setNumero(0);
+
+    if (op === "") {
+      setOldNum(numero);
+      setNumero(0);
+    }
   };
 
   const handleCalculate = () => {
     if (numero === 0 || oldNum === 0) {
       setNumero(0);
       setOldNum(0);
+      setOp("");
       return;
     }
 
@@ -48,6 +53,9 @@ function App() {
     if (op === "+") {
       setNumero(parseFloat(oldNum) + parseFloat(numero));
     }
+
+    setOp("");
+    setOldNum(0);
   };
 
   const porcentage = () => {
@@ -77,6 +85,7 @@ function App() {
   return (
     <div className="container">
       <div className="visor">
+        <div className="oldNum">{oldNum !== 0 ? `${oldNum} ${op}` : ""}</div>
         <h1>{numero}</h1>
       </div>
       <div className="button_container">
